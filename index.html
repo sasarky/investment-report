@@ -49,6 +49,24 @@
                         y: {
                             stacked: true
                         }
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                                var value = tooltipItem.yLabel;
+                                var total = 0;
+
+                                // 合計値を計算
+                                data.datasets.forEach(function(dataset) {
+                                    total += dataset.data[tooltipItem.index];
+                                });
+
+                                return label + ': ' + value + ' (Total: ' + total + ')';
+                            }
+                        }
                     }
                 }
             });
