@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chart.js with CSV Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.0"></script>
+</head>
+<body>
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <script>
+        // CSVファイルからデータを読み込む関数
+        function loadData() {
+            Papa.parse("data.csv", {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                complete: function(results) {
+                    var labels = results.data.map(function(e) { return e.label; });
+                    var values = results.data.map(function(e) { return e.value; });
+                    drawChart(labels, values);
+                }
+            });
+        }
+
+        // データを使ってグラフを描画する関数
+        function drawChart(labels, data) {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line', // グラフの種類
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sample Data',
+                        data: data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // ページがロードされたときにCSVデータを読み込む
+        window.onload = function() {
+            loadData();
+        };
+    </script>
+</body>
+</html>
